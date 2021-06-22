@@ -23,7 +23,7 @@ public class Player_Movement : MonoBehaviour
     private float push;
     private bool moveL;
     private bool moveR;
-    public float threshold = 0.1f;
+    public float threshold = 0.05f;
     public GameObject boneL;
     public GameObject boneR;
     public GameObject boneTipL;
@@ -150,6 +150,12 @@ public class Player_Movement : MonoBehaviour
         }
         if (push > threshold)
         {
+            float posz = -2.3f + (-0.3f + 2.3f)*(push-threshold)*scale*10;
+            if (posz > -0.3f)
+            {
+                posz = -0.3f;
+            }
+            transform.position = new Vector3(transform.position.x, transform.position.y, posz);
             float angleL = 90f + (95f-90f)*push*scale;
             if (angleL > 95f)
             {
@@ -202,6 +208,7 @@ public class Player_Movement : MonoBehaviour
         }
         if (push <= threshold)
         {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -2.3f);
             currentEulerL = new Vector3(90, 180f, 180f);
             boneL.transform.localEulerAngles = currentEulerL;
             currentEulerR = new Vector3(-20, 0f, 0f);
