@@ -50,6 +50,8 @@ public class Player_Movement : MonoBehaviour
     private Vector3 currentEulerMiddleR;
     private Vector3 currentEulerProxR;
 
+    public float scale = 1f;
+
     void Awake()
     {
         controls = new Controller();
@@ -148,25 +150,53 @@ public class Player_Movement : MonoBehaviour
         }
         if (push > threshold)
         {
-            float angleL = 90f + (95f-90f)*push;
+            float angleL = 90f + (95f-90f)*push*scale;
+            if (angleL > 95f)
+            {
+                angleL = 95f;
+            }
             currentEulerL = new Vector3(angleL, 180f, 180f);
             boneL.transform.localEulerAngles = currentEulerL;
-            float angleR = -20f + (-9f+20f)*push;
+            float angleR = -20f + (-9f+20f)*push*scale;
+            if (angleR > -9f)
+            {
+                angleR = -9f;
+            }
             currentEulerR = new Vector3(angleR, 0f, 0f);
             boneR.transform.localEulerAngles = currentEulerR;
-            float angleTipL = -30f + (-60f+30f)*push;
+            float angleTipL = -30f + (-60f+30f)*push*scale;
+            if (angleTipL < -60f)
+            {
+                angleTipL = -60f;
+            }
             currentEulerTipL = new Vector3(angleTipL, 0f, 0f);
             boneTipL.transform.localEulerAngles = currentEulerTipL;
-            float angleTipR = 0f + (80f-0f)*push;
+            float angleTipR = 0f + (80f-0f)*push*scale;
+            if (angleTipR > 80f)
+            {
+                angleTipR = 80f;
+            }
             currentEulerTipR = new Vector3(angleTipR, 0f, 0f);
             boneTipR.transform.localEulerAngles = currentEulerTipR;
-            float angleMiddleL = -10f + (-15f+10f)*push;
+            float angleMiddleL = -10f + (-15f+10f)*push*scale;            
+            if (angleMiddleL < -15f)
+            {
+                angleMiddleL = -15f;
+            }
             currentEulerMiddleL = new Vector3(angleMiddleL, 0f, 0f);
             boneMiddleL.transform.localEulerAngles = currentEulerMiddleL;
-            float angleMiddleR = 20f + (50f-20f)*push;
+            float angleMiddleR = 20f + (50f-20f)*push*scale;
+            if (angleMiddleR > 50f)
+            {
+                angleMiddleR = 50f;
+            }
             currentEulerMiddleR = new Vector3(angleMiddleR, 0f, 0f);
             boneMiddleR.transform.localEulerAngles = currentEulerMiddleR;
-            float angleProxR = 36f + (50f-36f)*push;
+            float angleProxR = 36f + (50f-36f)*push*scale;
+            if (angleProxR > 50f)
+            {
+                angleProxR = 50f;
+            }
             currentEulerProxR = new Vector3(angleProxR, 0f, 0f);
             boneProxR.transform.localEulerAngles = currentEulerProxR;
         }
