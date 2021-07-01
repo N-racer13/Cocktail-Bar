@@ -1,48 +1,64 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class ValveSystem : MonoBehaviour
 {
     Controller controls;
-    private float pusht;
-    public float scale = 1f;
+    private float push;
+    private float scale;
+    private float threshold;
     private bool hand = false;
     private float Scalefactor;
+    [SerializeField]
+    private Player_Movement HandParameters;
+    private int tag;
+    private int Number;
+    private bool pushLock = false;
 
     // Start is called before the first frame update
     void Awake()
     {
         controls = new Controller();
 
-        controls.Gameplay.Grasp.performed += ctx => pusht = ctx.ReadValue<float>();
-        controls.Gameplay.Grasp.canceled += ctx => pusht = 0f;
+        controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
+        controls.Gameplay.Grasp.canceled += ctx => push = 0f;
     }
     void Start()
     {
-        
+        scale = HandParameters.scale;
+        threshold = HandParameters.threshold;
+        int.TryParse(gameObject.tag, out tag);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (hand == true)
+        Number = HandParameters.Number;
+        pushLock = HandParameters.pushLock;
+        if (tag == Number && push > threshold && pushLock == true)
         {
-            Scalefactor = 1f - (1f+0.65f)*pusht*scale;
-            transform.localScale = new Vector3(transform.localScale.x*Scalefactor, transform.localScale.y, transform.localScale.z*Scalefactor);
+            //CurrentScale= transform.localScale
+            Scalefactor = 1f + (0.65f-1f)*(push-threshold)*scale;
+            if (Scalefactor < 0.65f)
+            {
+                Scalefactor = 0.65f;
+            }
+            transform.localScale = new Vector3(Scalefactor, transform.localScale.y, Scalefactor);
             
         }
-        Debug.Log(pusht);
+        if (push <= threshold)
+        {
+            transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
+        }
     }
-    void OnCollisionEnter(Collision collisionInfo)
+        void OnEnable()
     {
-        if (collisionInfo.collider.name == "Hand")
-        {
-            hand = true;
-        }
-        else
-        {
-            hand = false;
-        }
+        controls.Gameplay.Enable();
+    }
+        public void Disable()
+    {
+        controls.Gameplay.Enable();
     }
 }

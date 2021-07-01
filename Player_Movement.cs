@@ -17,8 +17,11 @@ public class Player_Movement : MonoBehaviour
     private bool flagR = false;
     private bool lockL;
     private bool lockR;
+    [HideInInspector]
+    public bool pushLock;
     public int NumberOfDispensers = 4;
-    private int Number;
+    [HideInInspector]
+    public int Number;
     Controller controls;
     private float push;
     private bool moveL;
@@ -35,12 +38,16 @@ public class Player_Movement : MonoBehaviour
     public GameObject Dispenser2;
     public GameObject Dispenser3;
     public GameObject Dispenser4;
+    public GameObject DispenserTrigger1;
+    public GameObject DispenserTrigger2;
+    public GameObject DispenserTrigger3;
+    public GameObject DispenserTrigger4;
     MeshRenderer mesh2;
     MeshRenderer mesh3;
     MeshRenderer mesh4;
-    CapsuleCollider col2;
-    CapsuleCollider col3;
-    CapsuleCollider col4;
+    BoxCollider col2;
+    BoxCollider col3;
+    BoxCollider col4;
     private Quaternion currentRotation;
     private Vector3 currentEulerL;
     private Vector3 currentEulerR;
@@ -49,9 +56,13 @@ public class Player_Movement : MonoBehaviour
     private Vector3 currentEulerMiddleL;
     private Vector3 currentEulerMiddleR;
     private Vector3 currentEulerProxR;
-
     public float scale = 1f;
-
+    public GameObject SqueezeSystem2;
+    public GameObject SqueezeSystem3;
+    public GameObject SqueezeSystem4;
+    MeshRenderer Squeezemesh2;
+    MeshRenderer Squeezemesh3;
+    MeshRenderer Squeezemesh4;
     void Awake()
     {
         controls = new Controller();
@@ -73,16 +84,22 @@ public class Player_Movement : MonoBehaviour
         mesh2 = Dispenser2.GetComponent<MeshRenderer>();
         mesh3 = Dispenser3.GetComponent<MeshRenderer>();
         mesh4 = Dispenser4.GetComponent<MeshRenderer>();
-        col2 = Dispenser2.GetComponent<CapsuleCollider>();
-        col3 = Dispenser3.GetComponent<CapsuleCollider>();
-        col4 = Dispenser4.GetComponent<CapsuleCollider>();
+        Squeezemesh2 = SqueezeSystem2.GetComponent<MeshRenderer>();
+        Squeezemesh3 = SqueezeSystem3.GetComponent<MeshRenderer>();
+        Squeezemesh4 = SqueezeSystem4.GetComponent<MeshRenderer>();
+        col2 = DispenserTrigger2.GetComponent<BoxCollider>();
+        col3 = DispenserTrigger3.GetComponent<BoxCollider>();
+        col4 = DispenserTrigger4.GetComponent<BoxCollider>();
         if (NumberOfDispensers == 3)
         {   
             mesh4.enabled = false;
             col4.enabled = false;
-            Dispenser2.transform.position = new Vector3(0f, 3.65f, 0f);
-            Dispenser1.transform.position = new Vector3(Distance, 3.65f, 0f);
-            Dispenser3.transform.position = new Vector3(-Distance, 3.65f, 0f);
+            Dispenser2.transform.position = new Vector3(0f, 7.74f, 0f);
+            DispenserTrigger2.transform.position = new Vector3(0f, 3.65f, -0.7f);
+            Dispenser1.transform.position = new Vector3(Distance, 7.74f, 0f);
+            DispenserTrigger1.transform.position = new Vector3(Distance, 3.65f, -0.7f);
+            Dispenser3.transform.position = new Vector3(-Distance, 7.74f, 0f);
+            DispenserTrigger3.transform.position = new Vector3(-Distance, 3.65f, -0.7f);
             transform.position = new Vector3(0f, transform.position.y, transform.position.z);
         }
         if (NumberOfDispensers == 2)
@@ -91,8 +108,10 @@ public class Player_Movement : MonoBehaviour
             mesh3.enabled = false;
             col4.enabled = false;
             col3.enabled = false;
-            Dispenser1.transform.position = new Vector3(Distance/2f, 3.65f, 0f);
-            Dispenser2.transform.position = new Vector3(-Distance/2f, 3.65f, 0);
+            Dispenser1.transform.position = new Vector3(Distance/2f, 7.74f, 0f);
+            DispenserTrigger1.transform.position = new Vector3(Distance/2f, 3.65f, -0.7f);
+            Dispenser2.transform.position = new Vector3(-Distance/2f, 7.74f, 0);
+            DispenserTrigger2.transform.position = new Vector3(-Distance/2f, 3.65f, -0.7f);
         }
         if (NumberOfDispensers == 1)
         {
@@ -102,7 +121,8 @@ public class Player_Movement : MonoBehaviour
             col4.enabled = false;
             col3.enabled = false;
             col2.enabled = false;
-            Dispenser1.transform.position = new Vector3(0f, 3.65f, 0f);
+            Dispenser1.transform.position = new Vector3(0f, 7.74f, 0f);
+            DispenserTrigger1.transform.position = new Vector3(0f, 3.65f, -0.7f);
             transform.position = new Vector3(0f, transform.position.y, transform.position.z);
         }
 
@@ -116,7 +136,7 @@ public class Player_Movement : MonoBehaviour
             flagL = false;
             flagR = false;
         }
-        if (moveL == true && flagL == false && flagR == false && lockL == false)
+        if (moveL == true && flagL == false && flagR == false && lockL == false && pushLock == false)
         {
             flagL = true;
             flagL = true;
@@ -133,7 +153,7 @@ public class Player_Movement : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, endPosition, curve.Evaluate(percentageComplete));
         }
 
-        if (moveR == true && flagR == false && flagL == false && lockR == false)
+        if (moveR == true && flagR == false && flagL == false && lockR == false && pushLock == false)
         {
             flagR = true;
             elapsedTime = 0;
@@ -148,8 +168,9 @@ public class Player_Movement : MonoBehaviour
             percentageComplete = elapsedTime / desiredDuration;
             transform.position = Vector3.Lerp(startPosition, endPosition, curve.Evaluate(percentageComplete));
         }
-        if (push > threshold)
+        if (push > threshold && flagL == false && flagR == false)
         {
+            pushLock = true;
             float posz = -2.3f + (-0.3f + 2.3f)*(push-threshold)*scale*10;
             if (posz > -0.3f)
             {
@@ -208,6 +229,7 @@ public class Player_Movement : MonoBehaviour
         }
         if (push <= threshold)
         {
+            pushLock = false;
             transform.position = new Vector3(transform.position.x, transform.position.y, -2.3f);
             currentEulerL = new Vector3(90, 180f, 180f);
             boneL.transform.localEulerAngles = currentEulerL;
@@ -224,7 +246,6 @@ public class Player_Movement : MonoBehaviour
             currentEulerProxR = new Vector3(36f, 0f, 0f);
             boneProxR.transform.localEulerAngles = currentEulerProxR;
         }
-        //Debug.Log(boneL.transform.localEulerAngles.x);
     }
     
     void OnCollisionEnter(Collision collisionInfo)
@@ -254,6 +275,10 @@ public class Player_Movement : MonoBehaviour
         Debug.Log(Number);
     }
     void OnEnable()
+    {
+        controls.Gameplay.Enable();
+    }
+        public void Disable()
     {
         controls.Gameplay.Enable();
     }
