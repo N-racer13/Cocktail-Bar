@@ -38,16 +38,6 @@ public class Player_Movement : MonoBehaviour
     public GameObject Dispenser2;
     public GameObject Dispenser3;
     public GameObject Dispenser4;
-    public GameObject DispenserTrigger1;
-    public GameObject DispenserTrigger2;
-    public GameObject DispenserTrigger3;
-    public GameObject DispenserTrigger4;
-    MeshRenderer mesh2;
-    MeshRenderer mesh3;
-    MeshRenderer mesh4;
-    BoxCollider col2;
-    BoxCollider col3;
-    BoxCollider col4;
     private Quaternion currentRotation;
     private Vector3 currentEulerL;
     private Vector3 currentEulerR;
@@ -57,12 +47,10 @@ public class Player_Movement : MonoBehaviour
     private Vector3 currentEulerMiddleR;
     private Vector3 currentEulerProxR;
     public float scale = 1f;
+    public GameObject SqueezeSystem1;
     public GameObject SqueezeSystem2;
     public GameObject SqueezeSystem3;
     public GameObject SqueezeSystem4;
-    MeshRenderer Squeezemesh2;
-    MeshRenderer Squeezemesh3;
-    MeshRenderer Squeezemesh4;
     void Awake()
     {
         controls = new Controller();
@@ -81,48 +69,39 @@ public class Player_Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mesh2 = Dispenser2.GetComponent<MeshRenderer>();
-        mesh3 = Dispenser3.GetComponent<MeshRenderer>();
-        mesh4 = Dispenser4.GetComponent<MeshRenderer>();
-        Squeezemesh2 = SqueezeSystem2.GetComponent<MeshRenderer>();
-        Squeezemesh3 = SqueezeSystem3.GetComponent<MeshRenderer>();
-        Squeezemesh4 = SqueezeSystem4.GetComponent<MeshRenderer>();
-        col2 = DispenserTrigger2.GetComponent<BoxCollider>();
-        col3 = DispenserTrigger3.GetComponent<BoxCollider>();
-        col4 = DispenserTrigger4.GetComponent<BoxCollider>();
         if (NumberOfDispensers == 3)
         {   
-            mesh4.enabled = false;
-            col4.enabled = false;
-            Dispenser2.transform.position = new Vector3(0f, 7.74f, 0f);
-            DispenserTrigger2.transform.position = new Vector3(0f, 3.65f, -0.7f);
-            Dispenser1.transform.position = new Vector3(Distance, 7.74f, 0f);
-            DispenserTrigger1.transform.position = new Vector3(Distance, 3.65f, -0.7f);
-            Dispenser3.transform.position = new Vector3(-Distance, 7.74f, 0f);
-            DispenserTrigger3.transform.position = new Vector3(-Distance, 3.65f, -0.7f);
+            Dispenser4.SetActive(false);
+            SqueezeSystem4.SetActive(false);
+            Dispenser2.transform.position = new Vector3(0f, 4f, 0f);
+            SqueezeSystem2.transform.position = new Vector3(0f, 4f, 0f);
+            Dispenser1.transform.position = new Vector3(Distance, 4f, 0f);
+            SqueezeSystem1.transform.position = new Vector3(Distance, 4f, 0f);
+            Dispenser3.transform.position = new Vector3(-Distance, 4f, 0f);
+            SqueezeSystem3.transform.position = new Vector3(-Distance, 4f, 0f);
             transform.position = new Vector3(0f, transform.position.y, transform.position.z);
         }
         if (NumberOfDispensers == 2)
         {   
-            mesh4.enabled = false;
-            mesh3.enabled = false;
-            col4.enabled = false;
-            col3.enabled = false;
-            Dispenser1.transform.position = new Vector3(Distance/2f, 7.74f, 0f);
-            DispenserTrigger1.transform.position = new Vector3(Distance/2f, 3.65f, -0.7f);
-            Dispenser2.transform.position = new Vector3(-Distance/2f, 7.74f, 0);
-            DispenserTrigger2.transform.position = new Vector3(-Distance/2f, 3.65f, -0.7f);
+            Dispenser4.SetActive(false);
+            SqueezeSystem4.SetActive(false);
+            Dispenser3.SetActive(false);
+            SqueezeSystem3.SetActive(false);
+            Dispenser1.transform.position = new Vector3(Distance/2f, 4f, 0f);
+            SqueezeSystem1.transform.position = new Vector3(Distance/2, 4f, 0f);
+            Dispenser2.transform.position = new Vector3(-Distance/2f, 4f, 0);
+            SqueezeSystem2.transform.position = new Vector3(-Distance/2, 4f, 0f);
         }
         if (NumberOfDispensers == 1)
         {
-            mesh4.enabled = false;
-            mesh3.enabled = false;
-            mesh2.enabled = false;
-            col4.enabled = false;
-            col3.enabled = false;
-            col2.enabled = false;
-            Dispenser1.transform.position = new Vector3(0f, 7.74f, 0f);
-            DispenserTrigger1.transform.position = new Vector3(0f, 3.65f, -0.7f);
+            Dispenser4.SetActive(false);
+            SqueezeSystem4.SetActive(false);
+            Dispenser3.SetActive(false);
+            SqueezeSystem3.SetActive(false);
+            Dispenser2.SetActive(false);
+            SqueezeSystem2.SetActive(false);
+            Dispenser1.transform.position = new Vector3(0f, 4f, 0f);
+            SqueezeSystem1.transform.position = new Vector3(0f, 4f, 0f);
             transform.position = new Vector3(0f, transform.position.y, transform.position.z);
         }
 
