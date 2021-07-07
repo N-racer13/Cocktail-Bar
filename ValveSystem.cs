@@ -9,14 +9,20 @@ public class ValveSystem : MonoBehaviour
     private float push;
     private float scale;
     private float threshold;
-    private bool hand = false;
-    private float Scalefactor;
+    private float posz;
+    private float Squeezefactor;
     [SerializeField]
     private Player_Movement HandParameters;
     private int tag;
     private int Number;
-    private bool pushLock = false;
-
+    public GameObject Fluid;
+    private float Fluidfactor = 1f;
+    public float FluidSensitivity = 0.001f;
+    public Rigidbody FluidDrop;
+    public float DropChance;
+    private float SpawnChance;
+    public Transform Spawnpoint;
+    private Rigidbody RigidDrop;
     // Start is called before the first frame update
     void Awake()
     {
@@ -36,19 +42,31 @@ public class ValveSystem : MonoBehaviour
     void Update()
     {
         Number = HandParameters.Number;
-        pushLock = HandParameters.pushLock;
-        if (tag == Number && push > threshold && pushLock == true)
+        posz = HandParameters.posz;
+        push = HandParameters.push;
+        if (tag == Number && posz == -0.3f)
         {
-            //CurrentScale= transform.localScale
-            Scalefactor = 1f + (0.65f-1f)*(push-threshold)*scale;
-            if (Scalefactor < 0.65f)
+            SpawnChance = Random.Range(0f, 1f)*push*scale;
+            Squeezefactor = 1f + (0.65f-1f)*(push-threshold)*scale;
+            Fluidfactor = Fluidfactor - (push-threshold)*scale*FluidSensitivity;
+            if (Squeezefactor < 0.65f)
             {
-                Scalefactor = 0.65f;
+                Squeezefactor = 0.65f;
             }
-            transform.localScale = new Vector3(Scalefactor, transform.localScale.y, Scalefactor);
-            
+            if (Fluidfactor < 0f)
+            {
+                Fluidfactor = 0f;
+            }
+            transform.localScale = new Vector3(Squeezefactor, transform.localScale.y, Squeezefactor);
+            Fluid.transform.localScale = new Vector3(Fluid.transform.localScale.x, Fluidfactor, Fluid.transform.localScale.z);
+            if (SpawnChance > 1-DropChance)
+            {
+                Rigidbody RigidDrop;
+                RigidDrop = Instantiate(FluidDrop, Spawnpoint.position, Spawnpoint.rotation) as Rigidbody;
+                RigidDrop.transform.localScale = new Vector3(0.35f*push*scale, 0.2f, 0.35f*push*scale);
+            }
         }
-        if (push <= threshold)
+        else
         {
             transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
         }

@@ -23,7 +23,8 @@ public class Player_Movement : MonoBehaviour
     [HideInInspector]
     public int Number;
     Controller controls;
-    private float push;
+    [HideInInspector]
+    public float push;
     private bool moveL;
     private bool moveR;
     public float threshold = 0.05f;
@@ -51,6 +52,9 @@ public class Player_Movement : MonoBehaviour
     public GameObject SqueezeSystem2;
     public GameObject SqueezeSystem3;
     public GameObject SqueezeSystem4;
+    [HideInInspector]
+    public float posz;
+
     void Awake()
     {
         controls = new Controller();
@@ -150,7 +154,7 @@ public class Player_Movement : MonoBehaviour
         if (push > threshold && flagL == false && flagR == false)
         {
             pushLock = true;
-            float posz = -2.3f + (-0.3f + 2.3f)*(push-threshold)*scale*10;
+            posz = -2.3f + (-0.3f + 2.3f)*(push-threshold)*scale*10;
             if (posz > -0.3f)
             {
                 posz = -0.3f;
@@ -251,7 +255,6 @@ public class Player_Movement : MonoBehaviour
             lockL = false;
             lockR = false;
         }
-        Debug.Log(Number);
     }
     void OnEnable()
     {
