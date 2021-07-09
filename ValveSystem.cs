@@ -32,10 +32,9 @@ public class ValveSystem : MonoBehaviour
     public float DropX;
     public float DropY;
     public float DropZ;
-    public GameObject Collider;
-    private Renderer rend;
-    private float fill = 0f;
     public bool ExtraDrops;
+    [HideInInspector]
+    public float DropScale;
 
     // Start is called before the first frame update
     void Awake()
@@ -50,8 +49,6 @@ public class ValveSystem : MonoBehaviour
         scale = HandParameters.scale;
         threshold = HandParameters.threshold;
         int.TryParse(gameObject.tag, out tag);
-        rend = Collider.GetComponent<Renderer>();
-        rend.material.shader = Shader.Find("Shader Graphs/FluidFiller");
     }
 
     // Update is called once per frame
@@ -60,11 +57,12 @@ public class ValveSystem : MonoBehaviour
         Number = HandParameters.Number;
         posz = HandParameters.posz;
         push = HandParameters.push;
+        DropScale = DropWidth.Evaluate(push);
         if (tag == Number && posz == -0.3f)
         {
-            SpawnChance = Random.Range(0f, 1f)*DropWidth.Evaluate(push);
+            SpawnChance = Random.Range(0f, 1f)*DropScale;
             Squeezefactor = 1f + (0.65f-1f)*(push-threshold)*scale;
-            Fluidfactor = Fluidfactor - (DropWidth.Evaluate(push)-threshold)*scale*FluidSensitivity;
+            Fluidfactor = Fluidfactor - (DropScale-threshold)*scale*FluidSensitivity;
             if (Squeezefactor < 0.65f)
             {
                 Squeezefactor = 0.65f;
@@ -80,18 +78,16 @@ public class ValveSystem : MonoBehaviour
             {
                 Rigidbody RigidDrop;
                 RigidDrop = Instantiate(FluidDrop, Spawnpoint.position, Spawnpoint.rotation) as Rigidbody;
-                RigidDrop.transform.localScale = new Vector3(DropX*DropWidth.Evaluate(push)*scale, DropY, DropZ*DropWidth.Evaluate(push)*scale);
+                RigidDrop.transform.localScale = new Vector3(DropX*DropScale*scale, DropY, DropZ*DropWidth.Evaluate(push)*scale);
                 RigidDrop.velocity = new Vector3(SputterChance.Evaluate(push)*10*Random.Range(-1f, 1f), -Velocity, SputterChance.Evaluate(push)*10*Random.Range(-1f, 1f));
                 if (ExtraDrops == true)
                 {
                     Rigidbody RigidDrop2;
                     RigidDrop2 = Instantiate(FluidDrop, Spawnpoint.position, Spawnpoint.rotation) as Rigidbody;
-                    RigidDrop2.transform.localScale = new Vector3(DropX*DropWidth.Evaluate(push)*scale, DropY, DropZ*DropWidth.Evaluate(push)*scale);
+                    RigidDrop2.transform.localScale = new Vector3(DropX*DropScale*scale, DropY, DropZ*DropScale*scale);
                     RigidDrop2.velocity = new Vector3(SputterChance.Evaluate(push)*10*Random.Range(-1f, 1f), -Velocity, SputterChance.Evaluate(push)*10*Random.Range(-1f, 1f));
                 }
             }
-            fill += 0.01f;
-            rend.material.SetFloat("Vector1_3EA5C93", fill);
         }
         else
         {
