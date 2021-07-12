@@ -213,6 +213,7 @@ public class Player_Movement : MonoBehaviour
         if (push <= threshold)
         {
             pushLock = false;
+            posz = -2.3f;
             transform.position = new Vector3(transform.position.x, transform.position.y, -2.3f);
             currentEulerL = new Vector3(90, 180f, 180f);
             boneL.transform.localEulerAngles = currentEulerL;
