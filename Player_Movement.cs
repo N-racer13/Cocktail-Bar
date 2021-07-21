@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem;
 
 public class Player_Movement : MonoBehaviour
 {
@@ -22,9 +22,8 @@ public class Player_Movement : MonoBehaviour
     public int NumberOfDispensers = 4;
     [HideInInspector]
     public int Number;
-    Controller controls;
-    [HideInInspector]
-    public float push;
+    //Controller controls;
+    private float push;
     private bool moveL;
     private bool moveR;
     public float threshold = 0.05f;
@@ -54,19 +53,20 @@ public class Player_Movement : MonoBehaviour
     public GameObject SqueezeSystem4;
     [HideInInspector]
     public float posz;
-
+    [SerializeField]
+    private SampleUserPolling_ReadWrite PushParameter;
     void Awake()
     {
-        controls = new Controller();
+        //controls = new Controller();
 
-        controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
-        controls.Gameplay.Grasp.canceled += ctx => push = 0f;
+        //controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
+        //controls.Gameplay.Grasp.canceled += ctx => push = 0f;
 
-        controls.Gameplay.Left.performed += ctx => moveL = true;
-        controls.Gameplay.Left.canceled += ctx => moveL = false;
+        //controls.Gameplay.Left.performed += ctx => moveL = true;
+        //controls.Gameplay.Left.canceled += ctx => moveL = false;
 
-        controls.Gameplay.Right.performed += ctx => moveR = true;
-        controls.Gameplay.Right.canceled += ctx => moveR = false;
+        //controls.Gameplay.Right.performed += ctx => moveR = true;
+        //controls.Gameplay.Right.canceled += ctx => moveR = false;
     }
 
 
@@ -114,6 +114,11 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        push = PushParameter.push;
+        Debug.Log("unity push = " + push);
+        moveL = Input.GetKeyDown(KeyCode.LeftArrow);
+        moveR = Input.GetKeyDown(KeyCode.RightArrow);
+
         if (percentageComplete > 1)
         {
             flagL = false;
@@ -256,13 +261,5 @@ public class Player_Movement : MonoBehaviour
             lockL = false;
             lockR = false;
         }
-    }
-    void OnEnable()
-    {
-        controls.Gameplay.Enable();
-    }
-        public void Disable()
-    {
-        controls.Gameplay.Enable();
     }
 }

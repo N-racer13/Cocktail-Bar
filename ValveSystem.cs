@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem;
 
 public class ValveSystem : MonoBehaviour
 {
-    Controller controls;
+    //Controller controls;
     private float push;
     private float scale;
     private float threshold;
@@ -35,14 +35,16 @@ public class ValveSystem : MonoBehaviour
     public bool ExtraDrops;
     [HideInInspector]
     public float DropScale;
+    [SerializeField]
+    private SampleUserPolling_ReadWrite PushParameter;
 
     // Start is called before the first frame update
     void Awake()
     {
-        controls = new Controller();
+        //controls = new Controller();
 
-        controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
-        controls.Gameplay.Grasp.canceled += ctx => push = 0f;
+        //controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
+        //controls.Gameplay.Grasp.canceled += ctx => push = 0f;
     }
     void Start()
     {
@@ -56,7 +58,7 @@ public class ValveSystem : MonoBehaviour
     {
         Number = HandParameters.Number;
         posz = HandParameters.posz;
-        push = HandParameters.push;
+        push = PushParameter.push;
         DropScale = DropWidth.Evaluate(push);
         if (tag == Number && posz == -0.3f)
         {
@@ -94,12 +96,5 @@ public class ValveSystem : MonoBehaviour
             transform.localScale = new Vector3(1f, transform.localScale.y, 1f);
         }
     }
-        void OnEnable()
-    {
-        controls.Gameplay.Enable();
-    }
-        public void Disable()
-    {
-        controls.Gameplay.Enable();
-    }
+
 }
