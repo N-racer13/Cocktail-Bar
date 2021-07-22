@@ -55,6 +55,7 @@ public class Player_Movement : MonoBehaviour
     public float posz;
     [SerializeField]
     private SampleUserPolling_ReadWrite PushParameter;
+    public float MoveForward = 10;
     void Awake()
     {
         //controls = new Controller();
@@ -159,7 +160,7 @@ public class Player_Movement : MonoBehaviour
         if (push > threshold && flagL == false && flagR == false)
         {
             pushLock = true;
-            posz = -2.3f + (-0.3f + 2.3f)*(push-threshold)*scale*10;
+            posz = -2.3f + (-0.3f + 2.3f)*(push-threshold)*scale*MoveForward;
             if (posz > -0.3f)
             {
                 posz = -0.3f;
