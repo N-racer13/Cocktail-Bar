@@ -116,7 +116,6 @@ public class Player_Movement : MonoBehaviour
     void Update()
     {
         push = PushParameter.push;
-        Debug.Log("unity push = " + push);
         moveL = Input.GetKeyDown(KeyCode.LeftArrow);
         moveR = Input.GetKeyDown(KeyCode.RightArrow);
 

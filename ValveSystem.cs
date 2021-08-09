@@ -37,6 +37,8 @@ public class ValveSystem : MonoBehaviour
     public float DropScale;
     [SerializeField]
     private SampleUserPolling_ReadWrite PushParameter;
+    public float K;
+    public float B;
 
     // Start is called before the first frame update
     void Awake()
