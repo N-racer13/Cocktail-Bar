@@ -37,17 +37,7 @@ public class ValveSystem : MonoBehaviour
     public float DropScale;
     [SerializeField]
     private SampleUserPolling_ReadWrite PushParameter;
-    public float K;
-    public float B;
 
-    // Start is called before the first frame update
-    void Awake()
-    {
-        //controls = new Controller();
-
-        //controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
-        //controls.Gameplay.Grasp.canceled += ctx => push = 0f;
-    }
     void Start()
     {
         scale = HandParameters.scale;

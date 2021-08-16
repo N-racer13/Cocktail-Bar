@@ -38,7 +38,6 @@ public class Player_Movement : MonoBehaviour
     public GameObject Dispenser2;
     public GameObject Dispenser3;
     public GameObject Dispenser4;
-    private Quaternion currentRotation;
     private Vector3 currentEulerL;
     private Vector3 currentEulerR;
     private Vector3 currentEulerTipL;
@@ -56,22 +55,7 @@ public class Player_Movement : MonoBehaviour
     [SerializeField]
     private SampleUserPolling_ReadWrite PushParameter;
     public float MoveForward = 10;
-    void Awake()
-    {
-        //controls = new Controller();
-
-        //controls.Gameplay.Grasp.performed += ctx => push = ctx.ReadValue<float>();
-        //controls.Gameplay.Grasp.canceled += ctx => push = 0f;
-
-        //controls.Gameplay.Left.performed += ctx => moveL = true;
-        //controls.Gameplay.Left.canceled += ctx => moveL = false;
-
-        //controls.Gameplay.Right.performed += ctx => moveR = true;
-        //controls.Gameplay.Right.canceled += ctx => moveR = false;
-    }
-
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         if (NumberOfDispensers == 3)
